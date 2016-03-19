@@ -55,15 +55,32 @@ app.get('/trailsData', function(req, res) {
   res.end();
 });
 
-app.get('/randomTrail', function(req, res) {
   // Pick a random trail
-  var randomTrail = trailsData[Math.floor(Math.random()*trailsData.length)]
-  var randomPark = trailsData.filter((trail) => trail.pmaid == randomTrail.pmaid)
-  // res.json(trailsData);
-  res.json(randomPark);
+  function pickRandomTrail() {
+    return trailsData[Math.floor(Math.random()*trailsData.length)]
+  }
+  function pickRandomPark() {
+    var randomTrail = pickRandomTrail();
+    return randomPark = trailsData.filter((trail) => trail.pmaid == randomTrail.pmaid)
+  }
+
+app.get('/randomTrail', function(req, res) {
+  res.json(pickRandomTrail());
   res.end();
-  // Then select only the official trail
 })
+
+app.get('/randomPark', function(req, res) {
+  res.json(pickRandomPark());
+  res.end();
+})
+  // Then select only the official trail
+  // function getOfficialTrail() {
+  //   var randomPark = pickRandomPark();
+  //   var officalTrails = randomPark.filter((trail) => trail.trail_clas == "1");
+  //   while (officalTrails.length < 1) getOfficialTrail()
+  //   return officalTrails;
+  // }
+  // res.json(trailsData);
 
 app.post('/location', function(req, res) {
   res.json(req.body);
