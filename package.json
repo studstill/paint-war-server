@@ -1,0 +1,29 @@
+{
+  "name": "paint-war-server",
+  "version": "1.0.0",
+  "description": "Node.js Express server for the Paint War Android app using Socket.IO and Mapbox",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/studstill/paint-war-server.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Express",
+    "Paint",
+    "War",
+    "Android",
+    "Socket.IO",
+    "Mapbox"
+  ],
+  "author": "Jason Studstill",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/studstill/paint-war-server/issues"
+  },
+  "homepage": "https://github.com/studstill/paint-war-server#readme"
+}
