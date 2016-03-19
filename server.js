@@ -1,6 +1,7 @@
 // Setup basic express server
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var PORT = process.env.PORT || 3000;
@@ -11,6 +12,12 @@ server.listen(PORT, function() {
 
 // Routing
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+
+app.post('/location', function(req, res) {
+  res.json(req.body);
+  res.end();
+});
 
 // Chatroom
 
