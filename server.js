@@ -9,6 +9,9 @@ server.listen(PORT, function() {
   console.log('Server listening at PORT ' + PORT);
 });
 
+// Routing
+app.use(express.static(__dirname + '/public'));
+
 // Chatroom
 
 var numUsers = 0;
