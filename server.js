@@ -55,7 +55,7 @@ app.listen(PORT, function() {
 
 // Routing
 app.use(express.static(__dirname + '/public'));
-app.use(cors);
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/trailsData', function(req, res) {
