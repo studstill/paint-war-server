@@ -25,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/studstill/paint-war-server/issues"
   },
-  "homepage": "https://github.com/studstill/paint-war-server#readme"
+  "homepage": "https://github.com/studstill/paint-war-server#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
+  }
 }
