@@ -28,6 +28,7 @@
   "homepage": "https://github.com/studstill/paint-war-server#readme",
   "dependencies": {
     "body-parser": "^1.15.0",
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "mongodb": "^2.1.7",
     "request": "^2.69.0",

@@ -1,7 +1,9 @@
 // Setup basic express server
+var util = require('util');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var cors = require('cors');
 var PORT = process.env.PORT || 3000;
 var request = require('request');
 var MongoClient = require('mongodb').MongoClient;
@@ -14,16 +16,21 @@ var trailsDataUrl = 'https://data.seattle.gov/resource/vwtx-gvpm.json'
 var trailsData = {}
 
 // Everytime the server is restarted, the our database is refreshed
+// request({'url': trailsDataUrl, 'X-App-Token': xAppToken}, function(err, res, body){
+//   trailsData = JSON.parse(body);
+//   MongoClient.connect(mongoUrl, function(err, db) {
+//     if (err) throw err;
+//     db.collection('seattle-trails-data').drop();
+//     db.collection('seattle-trails-data').insertOne({trailsData}, function(err, result) {
+//       if (err) throw err;
+//       console.log("Inserted a document into the seattle-trails collection.");
+//     });
+//   });
+// })
+
 request({'url': trailsDataUrl, 'X-App-Token': xAppToken}, function(err, res, body){
   trailsData = JSON.parse(body);
-  MongoClient.connect(mongoUrl, function(err, db) {
-    if (err) throw err;
-    db.collection('seattle-trails-data').drop();
-    db.collection('seattle-trails-data').insertOne({trailsData}, function(err, result) {
-      if (err) throw err;
-      console.log("Inserted a document into the seattle-trails collection.");
-    });
-  });
+  console.log('Got trails data from our mondgodb');
 })
 
 // convert numeric degress to radians
@@ -48,6 +55,7 @@ app.listen(PORT, function() {
 
 // Routing
 app.use(express.static(__dirname + '/public'));
+app.use(cors);
 app.use(bodyParser.json());
 
 app.get('/trailsData', function(req, res) {
@@ -59,18 +67,45 @@ app.get('/trailsData', function(req, res) {
   function pickRandomTrail() {
     return trailsData[Math.floor(Math.random()*trailsData.length)]
   }
+  // Pick a random park
   function pickRandomPark() {
     var randomTrail = pickRandomTrail();
     return randomPark = trailsData.filter((trail) => trail.pmaid == randomTrail.pmaid)
   }
 
 app.get('/randomTrail', function(req, res) {
-  res.json(pickRandomTrail());
+  var randomTrail = pickRandomTrail();
+  // Everytime the server is restarted, the our database is refreshed
+  request({'url': trailsDataUrl, 'X-App-Token': xAppToken}, function(err, res, body){
+    trailsData = JSON.parse(body);
+    MongoClient.connect(mongoUrl, function(err, db) {
+      if (err) throw err;
+      db.collection('random-trail').drop();
+      var bulk = db.collection('random-trail').initializeUnorderedBulkOp();
+      randomTrail.the_geom.coordinates.forEach(function(coordinate) {
+        var uniqueCoord = {
+          "location" : {
+            "type" : "Point",
+            "coordinates" : coordinate
+          },
+          "user" : "null"
+        };
+        bulk.insert(uniqueCoord);
+      });
+      bulk.execute(console.log("Inserted a bulk of coords into the seattle-trails collection."));
+      // db.collection('random-trail').ensureIndex({location: "2dsphere"});
+    });
+  })
+  res.json(randomTrail);
   res.end();
 })
 
 app.get('/randomPark', function(req, res) {
-  res.json(pickRandomPark());
+  randomPark = pickRandomPark();
+  var long = randomPark.the_geom
+
+
+  res.json(randomPark);
   res.end();
 })
   // Then select only the official trail
@@ -82,10 +117,21 @@ app.get('/randomPark', function(req, res) {
   // }
   // res.json(trailsData);
 
+// app.get
+
 app.post('/location', function(req, res) {
-  res.json(req.body);
-  res.end();
+  // var location = util.inspect(req.body.GPS);
+  // console.log(req.body);
+  MongoClient.connect(mongoUrl, function(err, db) {
+    // var matchedPoints = db.collection('random-trail').find({"location":{$near:{$geometry:{"type":"Point","coordinates":[-122.30,47.66]}, $maxDistance: 1000}}})
+    // res.json(matchedPoints);
+    var matchedPoints = db.collection('random-trail').find({});
+    res.json(matchedPoints);
+    res.end();
+  })
 });
 
+
+// Cycle through random park and save it to the database
 
 
