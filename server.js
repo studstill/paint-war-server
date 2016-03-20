@@ -116,8 +116,11 @@ app.get('/randomPark', function(req, res) {
   // }
   // res.json(trailsData);
 
+var lastPointHit = '';
+
 app.post('/location', function(req, res) {
   console.log(req.body);
+  lastPointHit = req.body.GPS;
   res.json(res.body);
   res.end();
 
@@ -141,6 +144,10 @@ app.post('/location', function(req, res) {
   // })
 });
 
+app.get('/lastPointHit', function(req, res) {
+  res.json(lastPointHit);
+  res.end();
+})
 
 // Cycle through random park and save it to the database
 
