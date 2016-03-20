@@ -117,6 +117,7 @@ app.get('/randomPark', function(req, res) {
   // res.json(trailsData);
 
 app.post('/location', function(req, res) {
+  console.log(res.body);
   res.json(res.body);
   res.end();
 
