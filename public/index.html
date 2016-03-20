@@ -21,7 +21,6 @@ $(document).ready(function() {
   var map = L.mapbox.map('map-one', 'mapbox.streets').setView([47.61, -122.33], 12);
   var myLayer = L.mapbox.featureLayer().addTo(map);
   var features = [];
-​
   $.get( "http://paint-war.herokuapp.com/randomTrail", function( data ) {
     var points = data.the_geom.coordinates;
     var origin = points[0];
@@ -41,17 +40,14 @@ $(document).ready(function() {
           }
       });
     }
-​
     myLayer.setGeoJSON({
         type: 'FeatureCollection',
         features: features
     });
-​
     map.setView([origin[1], origin[0]], 300);
     $( ".result" ).html( data );
   });
 });
-​
 </script>
 </body>
 </html>
