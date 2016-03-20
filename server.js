@@ -1,5 +1,4 @@
 // Setup basic express server
-var util = require('util');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -117,18 +116,28 @@ app.get('/randomPark', function(req, res) {
   // }
   // res.json(trailsData);
 
-// app.get
-
 app.post('/location', function(req, res) {
-  // var location = util.inspect(req.body.GPS);
-  // console.log(req.body);
-  MongoClient.connect(mongoUrl, function(err, db) {
-    // var matchedPoints = db.collection('random-trail').find({"location":{$near:{$geometry:{"type":"Point","coordinates":[-122.30,47.66]}, $maxDistance: 1000}}})
-    // res.json(matchedPoints);
-    var matchedPoints = db.collection('random-trail').find({});
-    res.json(matchedPoints);
-    res.end();
-  })
+  res.json(res.body);
+  res.end();
+
+  // var location = req.body.GPS;
+  // console.log(location);
+
+  // MongoClient.connect(mongoUrl, function(err, db) {
+    // var matchedPoints = db.collection('random-trail').find({"location":{$near:{$geometry:{type:"Point",coordinates:location}, $maxDistance: 10}}})
+    // db.collection('random-trail').find({}, function(err, data) {
+    //   res.json(data);
+    //   res.end();
+
+    // })
+
+    // db.collection('random-trail').find().toArray({}, function(err, data) {
+    //   console.log(data);
+    //   res.json(data);
+    //   res.end();
+    // });
+
+  // })
 });
 
 
