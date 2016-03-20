@@ -42,9 +42,9 @@ toRad = function (value) {
 // http://en.wikipedia.org/wiki/Equirectangular_projection
 Equirectangular = function(point1, point2) {
     var R = 6371; // earth radius in km
-    var x = (toRad(point2.lon)-toRad(point1.lon)) *
-            Math.cos((toRad(point1.lat)+toRad(point2.lat))/2);
-    var y = (toRad(point2.lat)-toRad(point1.lat));
+    var x = (toRad(point2[0])-toRad(point1[0])) *
+            Math.cos((toRad(point1[1])+toRad(point2[1]))/2);
+    var y = (toRad(point2[1])-toRad(point1[1]));
     return Math.sqrt(x*x + y*y) * R;
 };
 
@@ -101,10 +101,13 @@ app.get('/randomTrail', function(req, res) {
 
 app.get('/randomPark', function(req, res) {
   randomPark = pickRandomPark();
-  var long = randomPark.the_geom
+  var parkCoors = [];
+  randomPark.forEach(function(segment) {
+    parkCoors.concat(segment.the_geom.coordinates);
+  });
 
 
-  res.json(randomPark);
+  res.json(parkCoors);
   res.end();
 })
   // Then select only the official trail
@@ -121,6 +124,9 @@ var lastPointHit = '';
 app.post('/location', function(req, res) {
   console.log(req.body);
   lastPointHit = req.body.GPS;
+
+
+
   res.json(res.body);
   res.end();
 
