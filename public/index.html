@@ -24,7 +24,6 @@ $(document).ready(function() {
   $.get( "http://paint-war.herokuapp.com/randomTrail", function( data ) {
     var points = data.the_geom.coordinates;
     var origin = points[0];
-​
     for (var i = 0; i < points.length; i++) {
       console.log(points[i]);
       features.push({
